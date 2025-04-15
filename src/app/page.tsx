@@ -28,7 +28,7 @@ const languages = [
 export default function Home() {
   const [isDiscoverHovered, setIsDiscoverHovered] = useState(false);
   const [isLanguageDropdownVisible, setIsLanguageDropdownVisible] = useState(false); 
-  const discoverItems: [string, string][] = [["Brand Concept","/"], ["Episodes", "/"], ["Contact","/"], ["Become a collector","/"]];
+  const discoverItems: [string, string][] = [["Brand Concept","/"], ["Episodes", "/episodes"], ["Contact","/"], ["Become a collector","/"]];
   const [scrolled, setScrolled] = useState(false);
   const YoutubeEmbed = ({ embedId }: { embedId: string }) => (
     <div className="w-full aspect-video relative max-w-4xl px-4">
