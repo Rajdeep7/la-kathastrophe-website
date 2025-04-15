@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export type Episode = {
   id: string;
@@ -21,6 +22,17 @@ export const episodes: Episode[] = Array.from({ length: 25 }, (_, i) => {
   const shapeIndex = i % shapes.length;
   const sizeIndex = Math.floor(i / shapes.length) % sizes.length;
   
+  // Make episode 5 our featured "Analog girl in the digital world" episode
+  if (i === 4) {
+    return {
+      id: `episode-analog-digital`,
+      slug: `analog-girl-digital-world`,
+      title: `Analog girl in the digital world`,
+      shape: 'landscape',
+      size: 'large',
+    };
+  }
+  
   return {
     id: `episode-${i + 1}`,
     slug: `episode-${i + 1}`,
@@ -31,7 +43,7 @@ export const episodes: Episode[] = Array.from({ length: 25 }, (_, i) => {
 });
 
 const getGridClasses = (shape: Episode['shape'], size: Episode['size']) => {
-  const baseClasses = "relative overflow-hidden rounded-md bg-gray-800 transition-transform hover:scale-[1.03] hover:shadow-lg group";
+  const baseClasses = "relative overflow-hidden rounded-md bg-gray-800 transition-all duration-500 hover:shadow-2xl group";
   
   const sizeClasses = {
     small: {
@@ -54,6 +66,22 @@ const getGridClasses = (shape: Episode['shape'], size: Episode['size']) => {
   return `${baseClasses} ${sizeClasses[size][shape]}`;
 };
 
+// Staggered animation for grid items
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
 const EpisodeGrid: React.FC = () => {
   // Use client-side rendering to avoid hydration mismatches
   const [isClient, setIsClient] = useState(false);
@@ -68,29 +96,40 @@ const EpisodeGrid: React.FC = () => {
   }
   
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 p-4 auto-rows-[100px]">
+    <motion.div 
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 p-4 auto-rows-[100px]"
+      variants={container}
+      initial="hidden"
+      animate="show"
+    >
       {episodes.map((episode) => (
-        <Link
+        <motion.div
           key={episode.id}
-          href={`/episodes/${episode.slug}`}
+          variants={item}
+          whileHover={{ scale: 1.03 }}
           className={getGridClasses(episode.shape, episode.size)}
         >
-          <div className="w-full h-full relative">
-            {/* For now, using a colored div; will be replaced with actual images */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900">
-              <div className="absolute inset-0 flex items-center justify-center text-xs text-white/50">
-                {episode.shape} - {episode.size}
+          <Link
+            href={`/episodes/${episode.slug}`}
+            className="w-full h-full block"
+          >
+            <div className="w-full h-full relative">
+              {/* For now, using a colored div; will be replaced with actual images */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900">
+                <div className="absolute inset-0 flex items-center justify-center text-xs text-white/50">
+                  {episode.title}
+                </div>
+              </div>
+              
+              {/* Title overlay - only visible on hover */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-white font-medium text-sm md:text-base text-center px-4">{episode.title}</h3>
               </div>
             </div>
-            
-            {/* Title overlay - only visible on hover */}
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <h3 className="text-white font-medium text-sm md:text-base text-center px-4">{episode.title}</h3>
-            </div>
-          </div>
-        </Link>
+          </Link>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 

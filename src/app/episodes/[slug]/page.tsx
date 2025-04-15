@@ -54,7 +54,7 @@ export default function EpisodePage({ params }: EpisodePageProps) {
             <Link 
               href="/episodes" 
               className="flex items-center text-white/80 hover:text-white transition-colors">
-                <FaArrowLeft className="mr-2" /> Back to episodes
+                <FaArrowLeft className="mr-2" /> Back to Episodes
             </Link>
           </div>
           
@@ -86,7 +86,7 @@ export default function EpisodePage({ params }: EpisodePageProps) {
           <Link 
             href="/episodes" 
             className="flex items-center text-white/80 hover:text-white transition-colors">
-              <FaArrowLeft className="mr-2" /> Back to episodes
+              <FaArrowLeft className="mr-2" /> Back to Episodes
           </Link>
         </div>
         
