@@ -12,6 +12,7 @@ import {
 } from 'react-icons/si';
 import {FaArrowRight} from "react-icons/fa";
 import Image from "next/image";
+import Header from './components/Header';
 
 // Define the SocialIcon type
 type SocialIconProps = {
@@ -26,9 +27,13 @@ const languages = [
   { name: 'Kannada', native: 'ಕನ್ನಡ' },
 ];
 export default function Home() {
-  const [isDiscoverHovered, setIsDiscoverHovered] = useState(false);
   const [isLanguageDropdownVisible, setIsLanguageDropdownVisible] = useState(false); 
-  const discoverItems: [string, string][] = [["Brand Concept","/"], ["Episodes", "/episodes"], ["Contact","/"], ["Become a collector","/"]];
+  const discoverItems: [string, string][] = [
+    ["Brand Concept","/brand-concept"], 
+    ["Episodes", "/episodes"], 
+    ["Contact","/contact"], 
+    ["Become a collector","/become-collector"]
+  ];
   const [scrolled, setScrolled] = useState(false);
   const YoutubeEmbed = ({ embedId }: { embedId: string }) => (
     <div className="w-full aspect-video relative max-w-4xl px-4">
@@ -79,56 +84,63 @@ export default function Home() {
   }, []);
     return (
         <div className="bg-black text-white min-h-screen overflow-y-auto">
-            {/* Logo */}
-            <div className="absolute top-4 left-4">
-                <Image
-                    src="la-katha-logo.svg"
-                    alt="Logo"
-                    width={200}
-                    height={60}
-                />
-            </div>
-            <section className="relative flex flex-col justify-center items-center h-screen"> 
-                    
-              {/* Top Right Elements */}
-              <div className="absolute top-8 right-8 flex items-center space-x-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                  />
-                </svg>
-
-                <div
-                  onMouseEnter={() => setIsDiscoverHovered(true)}
-                  onMouseLeave={() => setIsDiscoverHovered(false)}
-                  className="relative px-4 py-2 bg-platinum"
-                >
-                  <Link href="/" className="hover:underline">Discover Katha
-                  </Link>
-                    {isDiscoverHovered && (
-                      <Dropdown items={discoverItems} />
-                    )}
-                </div>
-              </div>      
-
+            {/* Use the Header component */}
+            <Header />
+            
+            <section className="relative flex flex-col justify-center items-center h-screen">      
               {/* For CENTERED GIF: */}
               <CenteredGif />     
             </section>
 
+            {/* Featured Sections */}
+            <section className="py-20 px-4">
+              <div className="max-w-6xl mx-auto">
+                <h2 className="text-4xl md:text-5xl font-light tracking-wider text-center mb-16">DISCOVER LA KATHASTROPHE</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {/* Brand Concept Card */}
+                  <Link href="/brand-concept" className="group">
+                    <div className="relative h-80 overflow-hidden bg-gray-900 transition-transform duration-500 group-hover:scale-[1.02]">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
+                      <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                        <h3 className="text-2xl font-light tracking-wider mb-2">Brand Concept</h3>
+                        <p className="text-gray-300 text-sm">The artistic vision of Katharina Wigger</p>
+                      </div>
+                    </div>
+                  </Link>
+                  
+                  {/* Contact Card */}
+                  <Link href="/contact" className="group">
+                    <div className="relative h-80 overflow-hidden bg-gray-900 transition-transform duration-500 group-hover:scale-[1.02]">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
+                      <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                        <h3 className="text-2xl font-light tracking-wider mb-2">Contact</h3>
+                        <p className="text-gray-300 text-sm">Get in touch with our team</p>
+                      </div>
+                    </div>
+                  </Link>
+                  
+                  {/* Become a Collector Card */}
+                  <Link href="/become-collector" className="group">
+                    <div className="relative h-80 overflow-hidden bg-[#600000] transition-transform duration-500 group-hover:scale-[1.02]">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
+                      <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                        <h3 className="text-2xl font-light tracking-wider mb-2">Become a Collector</h3>
+                        <p className="text-gray-300 text-sm">Join our exclusive circle of art enthusiasts</p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </section>
+
             {/* Bottom Right Button */}
-            <div className="absolute bottom-4 right-4">
-              <button className="text-black font-normal py-2 px-4 rounded border border-red-500 bg-red-500 font-button hover:bg-red-600 transition-colors">
-                Disturbance
-              </button>
+            <div className="fixed bottom-4 right-4">
+              <Link href="/disturbance">
+                <button className="text-black font-normal py-2 px-4 rounded border border-red-500 bg-red-500 font-button hover:bg-red-600 transition-colors">
+                  Disturbance
+                </button>
+              </Link>
             </div>
         </div>
     );
@@ -154,10 +166,10 @@ function Section({ title, scrolled, button }: { title: string; scrolled: boolean
 
 function Dropdown({ items }: { items: [string, string][] }) {
   return (
-    <div className="absolute right-0 mt-2 w-32 bg-platinum rounded-md shadow-lg">
+    <div className="absolute right-0 mt-2 w-52 bg-platinum rounded-md shadow-lg">
       <ul className="py-1">
         {items.map(([itemName, itemLink], index) => (
-          <li key={index} className="px-4 py-2 hover:bg-white-300 text-white">
+          <li key={index} className="px-4 py-2 hover:bg-white-300 text-white whitespace-nowrap">
             <Link href={itemLink} className="block w-full h-full">
               {itemName}
             </Link>
